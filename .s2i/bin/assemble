@@ -1,0 +1,52 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 'play' image.
+# The 'assemble' script builds your application source so that it is ready to run.
+#
+# For more information refer to the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+if [[ "$1" == "-h" ]]; then
+	# If the 'play' assemble script is executed with '-h' flag,
+	# print the usage.
+	exec /usr/libexec/s2i/usage
+fi
+
+# Restore artifacts from the previous build (if they exist).
+#
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring build artifacts..."
+  cp -R /tmp/artifacts/.ivy2  /opt/app-root/src/
+  cp -R /tmp/artifacts/.sbt /opt/app-root/src/
+  cp -R /tmp/artifacts/tmp/src/project /tmp/src/project
+  cp -R /tmp/artifacts/tmp/src/target /tmp/src/target
+fi
+
+# Change to /tmp/src folder to build the application
+WORKDIR=$PWD;
+#cd /tmp/src
+cp -R  /tmp/src/* /opt/app-root/src/
+cd  /opt/app-root/src/
+
+#activator -Dactivator.checkForUpdates=false dist
+#sbt set "scalaHome := (file("/opt/scala/"))" 
+./activator dist
+
+cd /opt/app-root/src/target/universal/
+
+OUTPUT="$(ls *.zip)"
+
+# Go back to run folder
+cd $WORKDIR
+
+
+# Copy Built sources to the folder used by play
+echo "---> Installing application source..."
+#cp -Rf /tmp/src/target/universal/${OUTPUT}  ./
+unzip ${OUTPUT}
+#rm ${OUTPUT}
+APP_NAME=${OUTPUT%.*}
+chmod +x ${APP_NAME}
+cd ${APP_NAME}/bin
+rm *.bat
