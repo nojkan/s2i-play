@@ -17,23 +17,30 @@ fi
 #
 if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   echo "---> Restoring build artifacts..."
-  cp -R /tmp/artifacts/.ivy2  /opt/app-root/src/
-  cp -R /tmp/artifacts/.sbt /opt/app-root/src/
-  cp -R /tmp/artifacts/tmp/src/project /tmp/src/project
-  cp -R /tmp/artifacts/tmp/src/target /tmp/src/target
+#  cp -R /tmp/artifacts/.ivy2  /opt/app-root/src/
+#  cp -R /tmp/artifacts/.sbt /opt/app-root/src/
+#  cp -R /tmp/artifacts/.m2 /opt/app-root/src/
+#rm /op/app-root/src/repository/.ivy2/.sbt.cache.lock
+#rm /op/app-root/src/repository/.ivy2/.sbt.ivy.lock
+cp -R /tmp/artifacts/repository /opt/app-root/src/
+#  cp -R /tmp/artifacts/tmp/src/project /tmp/src/project
+#  cp -R /tmp/artifacts/tmp/src/target /tmp/src/target
 fi
 
 # Change to /tmp/src folder to build the application
 WORKDIR=$PWD;
 #cd /tmp/src
-cp -R  /tmp/src/* /opt/app-root/src/
-cd  /opt/app-root/src/
+#cp -R  /tmp/src/* /opt/app-root/src/
+cd  /tmp/src/
 
 #activator -Dactivator.checkForUpdates=false dist
 #sbt set "scalaHome := (file("/opt/scala/"))" 
-./activator dist
+#sbt publishLocal
+#./activator clean-files
+#./activator compile
+sbt dist
 
-cd /opt/app-root/src/target/universal/
+cd /tmp/src/target/universal/
 
 OUTPUT="$(ls *.zip)"
 
@@ -43,10 +50,11 @@ cd $WORKDIR
 
 # Copy Built sources to the folder used by play
 echo "---> Installing application source..."
-#cp -Rf /tmp/src/target/universal/${OUTPUT}  ./
-unzip ${OUTPUT}
-#rm ${OUTPUT}
+cp  /tmp/src/target/universal/${OUTPUT}  /opt/app-root/src/
+unzip /opt/app-root/src/${OUTPUT}
 APP_NAME=${OUTPUT%.*}
-chmod +x ${APP_NAME}
-cd ${APP_NAME}/bin
-rm *.bat
+chmod +x /opt/app-root/src/${APP_NAME}/bin/*
+#rm /opt/app-root/src/${OUTPUT}
+cd /opt/app-root/src/${APP_NAME}/bin
+rm /opt/app-root/src/${APP_NAME}/bin/*.bat
+chmod +x /opt/app-root/src/${APP_NAME}/bin/*

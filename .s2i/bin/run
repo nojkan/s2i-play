@@ -2,5 +2,5 @@ cd /opt/app-root/src/
 OUTPUT="$(ls *.zip)"
 APP_NAME=${OUTPUT%.*}
 #rm /opt/app-root/src/"${APP_NAME}"/RUNNING_PID
-exec /opt/app-root/src/"${APP_NAME}"/bin/*
+exec /opt/app-root/src/"${APP_NAME}"/bin/* -Dplay.crypto.secret=wanou
 

@@ -4,7 +4,8 @@ FROM openshift/base-centos7
 MAINTAINER Diverrez Erwan <ediverrez@gmail.com>
 
 ENV ACTIVATOR_VERSION 1.3.6
-ENV PATH $PATH:/opt/activator-$ACTIVATOR_VERSION-minimal/
+ENV PATH $PATH:/opt/app-root/activator-$ACTIVATOR_VERSION-minimal/
+ENV JAVA_HOME /usr/lib/jvm/java/bin
 
 LABEL io.k8s.description="Platform for building and running Play application" \
       io.k8s.display-name="builder play 2.5" \
@@ -27,16 +28,16 @@ RUN \
   yum clean all
 
 #install sudo
-#RUN \
-#  yum update -y && \
-#  yum install -y sudo && \
-#  yum clean all
+RUN \
+  yum update -y && \
+  yum install -y sudo && \
+  yum clean all
 
 
 #install sbt
-#RUN \ 
-#sudo curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo
-#RUN yum install -y sbt-0.13.13.1 
+RUN \ 
+sudo curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+RUN yum install -y sbt-0.13.13.1 
 
 
 
@@ -50,7 +51,7 @@ RUN \
 # echo "export SCALA_HOME=/opt/scala" >> /etc/profile && \
 # source /etc/profile
  
-
+WORKDIR /opt/app-root
 # install play
 RUN \
   curl -sOS http://downloads.typesafe.com/typesafe-activator/$ACTIVATOR_VERSION/typesafe-activator-$ACTIVATOR_VERSION-minimal.zip && \
@@ -78,24 +79,22 @@ RUN \
 #RUN echo "-Dactivator.checkForUpdates=false" >> /opt/app-root/src/.activator/activatorconfig.txt
 #RUN echo "-Dactivator.checkForTemplateUpdates=false" >> /opt/app-root/src/.activator/activatorconfig.txt
 
-RUN chmod a+x /opt/activator-$ACTIVATOR_VERSION-minimal/activator
-RUN ln -s  /opt/activator-$ACTIVATOR_VERSION-minimal /opt/activator
+RUN chmod a+x /opt/app-root/activator-$ACTIVATOR_VERSION-minimal/activator
+RUN ln -s  /opt/app-root/activator-$ACTIVATOR_VERSION-minimal /opt/activator
 WORKDIR /opt/app-root/src/
 
 # Copy the STI scripts from the specific language image to /usr/libexec/s2i
 COPY ./.s2i/bin/ /usr/libexec/s2i
 
-#RUN groupadd --gid 1001 s2i && useradd --gid 1001 --uid 1001 -m s2i
+
 
 RUN chown -R 1001:1001 /opt/app-root 
 
 USER 1001
 
-#VOLUME ["/app"]
-
-#WORKDIR /app
-
+RUN mkdir -p /opt/app-root/src/repository
+ENV JAVA_OPTS="$JAVA_OPTS -Dsbt.ivy.home=/opt/app-root/src/repository/.ivy2"
 EXPOSE 9000
+ENV _JAVA_OPTIONS="-Duser.home=/opt/app-root/src/repository"
 
-#CMD ["activator", "run"]
 CMD ["usage"]

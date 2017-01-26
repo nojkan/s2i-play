@@ -10,4 +10,5 @@
 # tar cf - <list of files and folders>
 cd /opt/app-root/src/
 # backup target  for incremental build
-tar cf - .ivy2 .sbt  /tmp/src/project /tmp/src/target
+tar cf -  repository  
+# /tmp/src/project /tmp/src/target
