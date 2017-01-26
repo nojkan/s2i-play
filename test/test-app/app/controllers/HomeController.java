@@ -17,7 +17,7 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(index.render("jeudi midi!!! Your new play 2.5 application on openshift is ready."));
+        return ok(index.render("jeudi vif!!! Your new play 2.5 application on openshift is ready."));
     }
 
 }

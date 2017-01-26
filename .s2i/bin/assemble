@@ -29,12 +29,9 @@ fi
 
 # Change to /tmp/src folder to build the application
 WORKDIR=$PWD;
-#cd /tmp/src
-#cp -R  /tmp/src/* /opt/app-root/src/
 cd  /tmp/src/
 
 #activator -Dactivator.checkForUpdates=false dist
-#sbt set "scalaHome := (file("/opt/scala/"))" 
 #sbt publishLocal
 #./activator clean-files
 #./activator compile
@@ -52,9 +49,9 @@ cd $WORKDIR
 echo "---> Installing application source..."
 cp  /tmp/src/target/universal/${OUTPUT}  /opt/app-root/src/
 unzip /opt/app-root/src/${OUTPUT}
+
 APP_NAME=${OUTPUT%.*}
 chmod +x /opt/app-root/src/${APP_NAME}/bin/*
-#rm /opt/app-root/src/${OUTPUT}
 cd /opt/app-root/src/${APP_NAME}/bin
 rm /opt/app-root/src/${APP_NAME}/bin/*.bat
 chmod +x /opt/app-root/src/${APP_NAME}/bin/*
