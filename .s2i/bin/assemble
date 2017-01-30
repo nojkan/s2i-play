@@ -17,17 +17,11 @@ fi
 #
 if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   echo "---> Restoring build artifacts..."
-#  cp -R /tmp/artifacts/.ivy2  /opt/app-root/src/
-#  cp -R /tmp/artifacts/.sbt /opt/app-root/src/
-#  cp -R /tmp/artifacts/.m2 /opt/app-root/src/
-#rm /op/app-root/src/repository/.ivy2/.sbt.cache.lock
-#rm /op/app-root/src/repository/.ivy2/.sbt.ivy.lock
 cp -R /tmp/artifacts/repository /opt/app-root/src/
-#  cp -R /tmp/artifacts/tmp/src/project /tmp/src/project
-#  cp -R /tmp/artifacts/tmp/src/target /tmp/src/target
 fi
 
 # Change to /tmp/src folder to build the application
+#WORDIR=/opt/app-root/src
 WORKDIR=$PWD;
 cd  /tmp/src/
 
@@ -47,11 +41,11 @@ cd $WORKDIR
 
 # Copy Built sources to the folder used by play
 echo "---> Installing application source..."
-cp  /tmp/src/target/universal/${OUTPUT}  /opt/app-root/src/
-unzip /opt/app-root/src/${OUTPUT}
+cp  /tmp/src/target/universal/${OUTPUT} $WORKDIR 
+unzip /opt/app-root/src/${OUTPUT} 
 
 APP_NAME=${OUTPUT%.*}
-chmod +x /opt/app-root/src/${APP_NAME}/bin/*
-cd /opt/app-root/src/${APP_NAME}/bin
-rm /opt/app-root/src/${APP_NAME}/bin/*.bat
-chmod +x /opt/app-root/src/${APP_NAME}/bin/*
+chmod +x $WORKDIR/${APP_NAME}/bin/*
+cd $WORKDIR/${APP_NAME}/bin
+rm $WORKDIR/${APP_NAME}/bin/*.bat
+chmod +x $WORKDIR/${APP_NAME}/bin/*

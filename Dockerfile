@@ -4,7 +4,7 @@ FROM openshift/base-centos7
 MAINTAINER Diverrez Erwan <ediverrez@gmail.com>
 
 ENV ACTIVATOR_VERSION 1.3.12
-ENV PATH $PATH:/opt/app-root/activator-$ACTIVATOR_VERSION-minimal/
+ENV PATH $PATH:/opt/app-root/activator-dist-$ACTIVATOR_VERSION/bin
 ENV JAVA_HOME /usr/lib/jvm/java/bin
 ENV JAVA_OPTS="$JAVA_OPTS -Dsbt.ivy.home=/opt/app-root/src/repository/.ivy2"
 ENV _JAVA_OPTIONS="-Duser.home=/opt/app-root/src/repository"
@@ -50,7 +50,7 @@ RUN \
 
 
 RUN chmod a+x /opt/app-root/activator-dist-$ACTIVATOR_VERSION/bin/activator
-RUN ln -s  /opt/app-root/activator-dist-$ACTIVATOR_VERSION /opt/activator
+#RUN ln -s  /opt/app-root/activator-dist-$ACTIVATOR_VERSION /opt/activator
 
 WORKDIR /opt/app-root/src/
 
