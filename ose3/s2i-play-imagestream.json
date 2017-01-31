@@ -1,0 +1,25 @@
+{
+   "kind": "ImageStream",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "s2i-play"
+   },
+   "spec": {
+      "dockerImageRepository": "nojkan/play-centos7",
+      "tags": [
+         {
+            "name": "v1.0",
+            "annotations": {
+               "description": "playFramework 2.5.12 java/scala  S2I image",
+               "iconClass": "icon-play",
+               "tags": "builder,java,scala,maven,gradle,play,playframework,microservices,akka",
+               "supports": "java:8,sbt:0.13.13"
+            },
+	    "from":{
+	       "kind":"DockerImage",
+	       "name":"openshift/base-centos7"
+	    }
+         }
+      ]
+   }
+}
