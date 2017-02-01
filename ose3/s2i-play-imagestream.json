@@ -14,12 +14,8 @@
                "iconClass": "icon-play",
                "tags": "builder,java,scala,maven,gradle,play,playframework,microservices,akka",
                "supports": "java:8,sbt:0.13.13"
-            },
-	    "from":{
-	       "kind":"DockerImage",
-	       "name":"openshift/base-centos7"
+           } 
 	    }
-         }
       ]
    }
 }
