@@ -1,5 +1,5 @@
 cd /opt/app-root/src/
 OUTPUT="$(ls *.zip)"
 APP_NAME=${OUTPUT%.*}
-exec /opt/app-root/src/"${APP_NAME}"/bin/* -Dplay.crypto.secret=${APPLICATION_SECRET}
-
+#exec /opt/app-root/src/"${APP_NAME}"/bin/* -Dplay.crypto.secret=${APPLICATION_SECRET}
+exec /bin/bash
