@@ -2,7 +2,7 @@
    "kind": "ImageStream",
    "apiVersion": "v1",
    "metadata": {
-      "name": "s2i-play"
+      "name": "play2.5"
    },
    "spec": {
       "dockerImageRepository": "nojkan/play-centos7",
